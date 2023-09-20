@@ -1,9 +1,15 @@
+<br>
 <div class="d-grid gap-2 col-6 mx-auto container">
     <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <a class="text-decoration-none text-reset">Ajouter une taches</a>
     </button>
     <div class="container">
-        <h2>Solde: {{ solde }}</h2>
+        <ng-template [ngIf]="solde > 0" [ngIfElse]="negatif">
+            <h2 class="text-center text-success">Solde: {{ solde }} €</h2>
+        </ng-template>
+        <ng-template #negatif>
+            <h2 class="text-center text-danger">Solde: {{ solde }} €</h2>
+        </ng-template>
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -24,7 +30,6 @@
                         <input name="montant" type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ngModel required>
                     </div>
                     <select name="categorie" class="form-select" aria-label="Default select example" ngModel required>
-                        <option value="">--- Catégorie</option>
                         <option value="Entrée">Entrée</option>
                         <option value="Dépense">Dépense</option>
                     </select>
@@ -45,16 +50,22 @@
                 <th scope="col">Labelle</th>
                 <th scope="col">Montant</th>
                 <th scope="col">Catégorie</th>
-                <th scope="col">Date</th>   
+                <th scope="col">Date</th>
+                <th scope="col">Supprimer</th>   
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let transaction of transactionList">
                 <th scope="row">{{ transaction.id }}</th>
                 <td>{{ transaction.labelle }}</td>
-                <td>{{ transaction.montant }}</td>
+                <td [ngClass]="{'text-success': transaction.categorie == 'Entrée', 'text-danger': transaction.categorie == 'Dépense'}">{{ transaction.montant }}</td>
                 <td>{{ transaction.categorie }}</td>
                 <td>{{ transaction.date | date }}</td>
+                <td>
+                    <button class="btn" (click)="deleteTransaction(transaction.id)">
+                        <i class="fa-solid fa-trash-can" style="color: #f20707;"></i>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>

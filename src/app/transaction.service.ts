@@ -19,9 +19,14 @@ export class TransactionService {
   }
 
   add(transaction:Transaction){
-    transaction.id = TRANSACTIONS.length + 1;
+    let lastTransaction = TRANSACTIONS[TRANSACTIONS.length-1];
+    transaction.id = lastTransaction.id + 1;
     transaction.date = new Date();
     TRANSACTIONS.push(transaction);
+  }
+
+  delete(transaction:Transaction){
+    TRANSACTIONS.splice(TRANSACTIONS.indexOf(transaction),1);
   }
 
 }

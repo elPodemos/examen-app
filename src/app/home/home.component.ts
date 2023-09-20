@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   ){}
 
   transactionList: Transaction[] = [];
+  transaction: Transaction | undefined;
 
   budgetStart: number = 100;
   solde: number = this.budgetStart;
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
     this.service.add(form.value);
     this.solde = this.budgetStart;
     this.getSolde();
+    form.reset();
   }
 
   getSolde(){
@@ -53,6 +55,11 @@ export class HomeComponent implements OnInit {
         this.solde -= transaction.montant;
       }
     });
+  }
+
+  deleteTransaction(id:number){
+    this.transaction = this.service.fetchById(id);
+    return this.service.delete(this.transaction);
   }
 
 }
